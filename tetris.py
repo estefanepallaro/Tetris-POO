@@ -18,6 +18,11 @@ class Tetris:
 
     def __init__(self):
         self.reset()
+        self._score = 0
+
+    @property
+    def score(self) -> int:
+        return self._score
 
     @property
     def width(self) -> int:
@@ -113,6 +118,8 @@ class Tetris:
         r = 0
         while r < self.height:
             if all (self._grid[c][r] != None for c in range(self.width)):
+                self._score += 100
+
                 for c in range(self.width):
                     self._grid[c].pop(r)
                     self._grid[c].insert(0, None)
