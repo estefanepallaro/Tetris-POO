@@ -32,10 +32,12 @@ def main() -> None:
                 game.move_down()
             case 'w':
                 game.rotate()
-            case 'x' | '':
+            case 'x':
                 game.drop()
             case 'q':
                 break
+    if game.game_over:
+        print("Game Over!")
 
 if __name__== '__main__':
     main()
