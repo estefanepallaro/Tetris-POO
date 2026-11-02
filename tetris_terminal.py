@@ -46,23 +46,96 @@ def colored_board(game: Tetris) -> str:
 
 # letreiro no topo
 def exibir_letreiro() -> None:
-    R = "\033[38;2;240;0;0m"
-    L = "\033[38;2;240;160;0m"
-    A = "\033[38;2;240;240;0m"
-    V = "\033[38;2;0;240;0m"
-    C = "\033[38;2;0;240;240m"
-    P = "\033[38;2;160;0;240m"
-    Z = "\033[0m"  # Reset
+    RESET = "\033[0m"
 
-    letreiro_colorido = (
-        f"{R}  _______ {L}     {A} _   {V}     {C} _ {P}    {Z}\n"
-        f"{R} |__   __|{L}     {A}| |  {V}     {C}(_){P}    {Z}\n"
-        f"{R}    | |   {L} ___ {A}| |_ {V}_ __ {C} _ {P} ___ {Z}\n"
-        f"{R}    | |   {L}/ _ \\{A}| __|{V} '__|{C}| |{P}/ __|{Z}\n"
-        f"{R}    | |  {L}|  __/{A}| |_ {V}| |  {C}| |{P}\\__ \\{Z}\n"
-        f"{R}    |_|   {L}\\___|{A} \\__|{V}|_|  {C}|_|{P}|___/{Z}\n"
-    )
-    print(letreiro_colorido)
+    cores = [
+        "\033[38;2;245;50;55m",    # T - vermelho
+        "\033[38;2;255;190;15m",   # E - laranja
+        "\033[38;2;255;225;90m",   # T - amarelo
+        "\033[38;2;75;215;125m",   # R - verde
+        "\033[38;2;70;145;240m",   # I - azul
+        "\033[38;2;185;90;200m",   # S - roxo
+    ]
+
+    letras = {
+    "T": [
+        "111",
+        "010",
+        "010",
+        "010",
+        "010",
+    ],
+
+    "E": [
+        "111",
+        "100",
+        "110",
+        "100",
+        "111",
+    ],
+
+    "R": [
+        "110",
+        "101",
+        "110",
+        "101",
+        "101",
+    ],
+
+    "I": [
+        "111",
+        "010",
+        "010",
+        "010",
+        "111",
+    ],
+
+    "S": [
+        "111",
+        "100",
+        "111",
+        "001",
+        "111",
+    ],
+}
+
+    palavra = "TETRIS"
+
+    altura = 6
+    largura_letra = 4
+
+    # local que vai ser alocada as letras
+    canvas = {}
+
+    x_inicio = 0
+
+    for indice, letra in enumerate(palavra):
+        desenho = letras[letra]
+        cor = cores[indice]
+
+        for y, linha in enumerate(desenho):
+            for x, pixel in enumerate(linha):
+
+                if pixel == "1":
+
+
+                    canvas[(x_inicio + x, y)] = ("██", cor)
+
+        x_inicio += largura_letra
+
+    for y in range(altura):
+        linha = ""
+
+        for x in range(x_inicio):
+            if (x, y) in canvas:
+                bloco, cor = canvas[(x, y)]
+                linha += cor + bloco + RESET
+
+            else:
+                linha += "  "
+
+        print(linha)
+
 
 def bordas(game: Tetris):
 

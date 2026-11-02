@@ -76,12 +76,19 @@ class TetrisApp(tk.Tk):
         self._canvas.delete("all")
 
         # sombra
-        sombra = self.game.ghost_cells() if not self.game.game_over else set()
-        cor_ativa = self.game.active_tetrimino.color
-        r = int(int(cor_ativa[1:3], 16) * 0.3 + 255 * 0.7)
-        g = int(int(cor_ativa[3:5], 16) * 0.3 + 255 * 0.7)
-        b = int(int(cor_ativa[5:7], 16) * 0.3 + 255 * 0.7)
-        cor_sombra = f"#{r:02x}{g:02x}{b:02x}"
+        if not self.game.game_over:
+            sombra = self.game.ghost_cells()
+            cor_ativa = self.game.active_tetrimino.color
+
+            r = int(int(cor_ativa[1:3], 16) * 0.3 + 255 * 0.7)
+            g = int(int(cor_ativa[3:5], 16) * 0.3 + 255 * 0.7)
+            b = int(int(cor_ativa[5:7], 16) * 0.3 + 255 * 0.7)
+
+            cor_sombra = f"#{r:02x}{g:02x}{b:02x}"
+        else:
+            sombra = set()
+            cor_sombra = None
+            cor_ativa = None
 
         for col in range(self.game.width):
             for row in range(self.game.height):
