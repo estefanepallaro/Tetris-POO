@@ -5,8 +5,10 @@ from tetris import Tetris
 def colored_board(game: Tetris) -> str:
     board = []
 
-    active_cells = set(game._tetri_cells(game._tetri_col, game._tetri_row))
-    ghost = game.ghost_cells()
+    if game.game_over:
+        ghost = set()
+    else:
+        ghost = game.ghost_cells()
 
     for row in range(game.height):
         row_str = []
@@ -14,15 +16,7 @@ def colored_board(game: Tetris) -> str:
         for col in range(game.width):
             color = game.color_at(col, row)
 
-            if (col, row) in active_cells:
-                color = game.active_tetrimino.color
-                r = int(color[1:3], 16)
-                g = int(color[3:5], 16)
-                b = int(color[5:7], 16)
-
-                row_str.append(f"\033[38;2;{r};{g};{b}m██\033[0m")
-
-            elif (col, row) in ghost and color is None:
+            if (col, row) in ghost and color is None:
                 color = game.active_tetrimino.color
                 r = int(color[1:3], 16)
                 g = int(color[3:5], 16)
@@ -117,8 +111,6 @@ def exibir_letreiro() -> None:
             for x, pixel in enumerate(linha):
 
                 if pixel == "1":
-
-
                     canvas[(x_inicio + x, y)] = ("██", cor)
 
         x_inicio += largura_letra
@@ -137,7 +129,7 @@ def exibir_letreiro() -> None:
         print(linha)
 
 
-def bordas(game: Tetris):
+def exibir_jogo(game: Tetris):
 
     print("\033[2J\033[H", end="")
     exibir_letreiro()
@@ -145,25 +137,32 @@ def bordas(game: Tetris):
     largura = game.width * 2
 
     linhas_tabuleiro = []
-    linhas_tabuleiro.append("╔" + "=" * largura + "╗")
+    linhas_tabuleiro.append("╔" + "═" * largura + "╗")
 
     for linha in colored_board(game).split("\n"):
         linhas_tabuleiro.append("║" + linha + "║")
 
-    linhas_tabuleiro.append("╚" + "=" * largura + "╝")
+    linhas_tabuleiro.append("╚" + "═" * largura + "╝")
 
     
 
     painel = [
-        f"Score: {game.score}",
+        f"SCORE: {game.score}",
         "",
-        "A - esquerda",
-        "D - direita",
-        "S - descer",
-        "W - girar",
-        "X - queda",
-        "Q - sair",
+        "CONTROLES",
+        "────────────",
+        "A  esquerda",
+        "D  direita",
+        "S  descer",
+        "W  girar",
+        "X  queda",
+        "Q  sair",
     ]
+
+    if game.game_over:
+        painel.append("")
+        painel.append("GAME OVER!")
+        painel.append(f"Score final: {game.score}")
 
     total_linhas = max(len(linhas_tabuleiro), len(painel))
 
@@ -180,7 +179,7 @@ def main() -> None:
     game = Tetris()
 
     while not game.game_over:
-        bordas(game)
+        exibir_jogo(game)
 
         comando = input("> ").lower()
 
@@ -198,7 +197,7 @@ def main() -> None:
             case 'q':
                 break
     if game.game_over:
-        print("Game Over!")
+            exibir_jogo(game)
 
 if __name__== '__main__':
     main()
