@@ -6,7 +6,7 @@ def colored_board(game: Tetris) -> str:
     board = []
 
     active_cells = set(game._tetri_cells(game._tetri_col, game._tetri_row))
-    ghost = ghost_cells(game)
+    ghost = game.ghost_cells()
 
     for row in range(game.height):
         row_str = []
@@ -43,14 +43,6 @@ def colored_board(game: Tetris) -> str:
         board.append("".join(row_str))
 
     return "\n".join(board)
-
-def ghost_cells(game: Tetris) -> set[tuple[int, int]]:
-    ghost_row = game._tetri_row
-
-    while game._tetri_fits(game._tetri_col, ghost_row + 1):
-        ghost_row += 1
-
-    return set(game._tetri_cells(game._tetri_col, ghost_row))
 
 def bordas(game: Tetris):
 
