@@ -10,6 +10,27 @@ class TetrisApp(tk.Tk):
 
         # configurações da janela
         self.title('Tetris')
+
+        # letreiro
+        painel_titulo = tk.Frame(self)
+        painel_titulo.pack(pady=10)
+        letras_cores = [
+            ("T", "#f00000"), # Vermelho
+            ("E", "#f0a000"), # Laranja
+            ("T", "#f0f000"), # Amarelo
+            ("R", "#00f000"), # Verde
+            ("I", "#00f0f0"), # Ciano
+            ("S", "#a000f0")  # Roxo
+        ]
+        for letra, cor in letras_cores:
+            lbl = tk.Label(
+                painel_titulo, 
+                text=letra, 
+                font=("Arial", 36, "bold"),
+                fg=cor,                      
+            )
+            lbl.pack(side=tk.LEFT)
+            
         self.game = Tetris()
         self._after_id: str | None = None
         self._canvas = tk.Canvas(self, width=self.game.width * self.CELL_SIZE, height=self.game.height * self.CELL_SIZE, bg = 'black')
