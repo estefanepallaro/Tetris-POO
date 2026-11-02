@@ -101,6 +101,12 @@ class Tetris:
                 return False
         return True
 
+    def ghost_cells(self) -> set[tuple[int, int]]:
+        ghost_row = self._tetri_row
+        while self._tetri_fits(self._tetri_col, ghost_row + 1):
+            ghost_row += 1
+        return set(self._tetri_cells(self._tetri_col, ghost_row))
+
     def _new_tetrimino(self) -> None:
         self._tetri_active = random.choice(Tetris._TETRIMINOS)()
         self._tetri_col = (self.width - self._tetri_active.box_size) // 2
