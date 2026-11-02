@@ -1,8 +1,9 @@
 import tkinter as tk
 from tetris import Tetris
+from collections.abc import Callable
 
 class TetrisApp(tk.Tk):
-    CELL_SIZE = 30
+    CELL_SIZE = 35
 
     def __init__(self):
         super().__init__()
@@ -29,4 +30,69 @@ class TetrisApp(tk.Tk):
         self._draw()
         self._schedule_fall()
 
-    
+    def _play(self, move: Callable[[], None]):
+        move()
+        self._draw()
+
+    def _schedule_fall(self):
+        self._after_id = self.after(700, self._fall)
+
+    def _fall(self):
+        if not self.game.game_over:
+            self.game.move_down()
+            self._draw()
+            self._schedule_fall()
+
+    def _restart(self):
+        if self._after_id is not None:
+            self.after_cancel(self._after_id)
+        self.game.reset()
+        self._status.config(text="")
+        self._draw()
+        self._schedule_fall()
+
+    def _draw(self):
+        self._canvas.delete("all")
+
+        # sombra
+        sombra = self.game.ghost_cells() if not self.game.game_over else set()
+        cor_ativa = self.game.active_tetrimino.color
+        r = int(int(cor_ativa[1:3], 16) * 0.3 + 255 * 0.7)
+        g = int(int(cor_ativa[3:5], 16) * 0.3 + 255 * 0.7)
+        b = int(int(cor_ativa[5:7], 16) * 0.3 + 255 * 0.7)
+        cor_sombra = f"#{r:02x}{g:02x}{b:02x}"
+
+        for col in range(self.game.width):
+            for row in range(self.game.height):
+                color = self.game.color_at(col, row)
+
+                if color is not None:
+                    # bloco normal
+                    self._canvas.create_rectangle(
+                        col * self.CELL_SIZE,
+                        row * self.CELL_SIZE,
+                        (col + 1) * self.CELL_SIZE,
+                        (row + 1) * self.CELL_SIZE,
+                        fill=color,
+                        outline="black"
+                    )
+                elif (col, row) in sombra:
+                    # sombra translúcida
+                    self._canvas.create_rectangle(
+                        col * self.CELL_SIZE,
+                        row * self.CELL_SIZE,
+                        (col + 1) * self.CELL_SIZE,
+                        (row + 1) * self.CELL_SIZE,
+                        fill=cor_sombra,
+                        outline=cor_ativa
+                    )
+
+        if self.game.game_over:
+            self._status.config(text=f"Game Over! Score final: {self.game.score}")
+        else:
+            self._status.config(text=f"Score: {self.game.score}")
+
+if __name__ == "__main__":
+    app = TetrisApp()
+    app.mainloop()
+
