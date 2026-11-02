@@ -44,9 +44,30 @@ def colored_board(game: Tetris) -> str:
 
     return "\n".join(board)
 
+# letreiro no topo
+def exibir_letreiro() -> None:
+    R = "\033[38;2;240;0;0m"
+    L = "\033[38;2;240;160;0m"
+    A = "\033[38;2;240;240;0m"
+    V = "\033[38;2;0;240;0m"
+    C = "\033[38;2;0;240;240m"
+    P = "\033[38;2;160;0;240m"
+    Z = "\033[0m"  # Reset
+
+    letreiro_colorido = (
+        f"{R}  _______ {L}     {A} _   {V}     {C} _ {P}    {Z}\n"
+        f"{R} |__   __|{L}     {A}| |  {V}     {C}(_){P}    {Z}\n"
+        f"{R}    | |   {L} ___ {A}| |_ {V}_ __ {C} _ {P}___ {Z}\n"
+        f"{R}    | |   {L}/ _ \\{A}| __|{V} '__|{C}| |{P}/ __|{Z}\n"
+        f"{R}    | |  {L}|  __/{A}| |_ {V}| |  {C}| |{P}\\__ \\{Z}\n"
+        f"{R}    |_|   {L}\\___|{A} \\__|{V}|_|  {C}|_|{P}|___/{Z}\n"
+    )
+    print(letreiro_colorido)
+
 def bordas(game: Tetris):
 
     print("\033[2J\033[H", end="")
+    exibir_letreiro()
 
     largura = game.width * 2
 
