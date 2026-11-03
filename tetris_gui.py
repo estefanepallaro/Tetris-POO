@@ -16,7 +16,7 @@ class TetrisApp(tk.Tk):
         painel_titulo.pack(pady=10)
         letras_cores = [
             ("T", "#f00000"), # Vermelho
-            ("E", "#f0a000"), # Laranja
+            ("E", "#f06800"), # Laranja
             ("T", "#f0f000"), # Amarelo
             ("R", "#00f000"), # Verde
             ("I", "#00f0f0"), # Ciano
@@ -56,8 +56,9 @@ class TetrisApp(tk.Tk):
         self._draw()
 
     def _schedule_fall(self):
-        self._after_id = self.after(700, self._fall)
-
+        velocidade = max(100, 800 - (self.game.score // 500) * 50)
+        self._after_id = self.after(velocidade, self._fall)
+        
     def _fall(self):
         if not self.game.game_over:
             self.game.move_down()
