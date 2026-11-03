@@ -1,15 +1,23 @@
-# O TetriminoShape significa que sempre uma forma vai ter 4 objetos Block na sua composição.
-# O ABC significa que a classe vai abstrata, ou seja, a ideia não é criar diretamente, mas ele será base das outras formas.
-# initial_rotation significa a rotação do tetrimino.
-# rotações: 0 = inicial, 1 = 90º, 2 = 180º, 3 = 270º.
-# original_shape é a forma original da peça, ela tem a função abstrata.
-# _box.size a sua lógica representa pegar o maior valor do bloco e fora do bloco pegar o maior valor dos 4 blocos.
-# _rotate.shape é staticmethod, pois não precisa usar o self, pois ele só precisa do shape e o box_size para transformar uma nova forma de rotação.
-# Além disso a lógica dele é definir as formas de 90º no sentido horário, assim transformando cada bloco em (box_size - 1 - y, x).
-# Os shapes são as rotações das formmas, na qual giram 90º graus.
-# Os Left e Right são funções de movimento para a esquerda e direita, a porcentagem 4 faz esse ciclo. (Lembrando que é só 0, 1, 2, 3 de movimento).
-# A função color é abstrata, pois vai ser usada nas cores dos tetriminos.
-# O __str__ é usado para desenhar a peça em texto, assim ocupando a caixa inteira.
+# TetriminoShape define que toda forma de tetrimino possui quatro objetos Block.
+# ABC define Tetrimino como uma classe abstrata, que serve como base para os outros tetriminos.
+# initial_rotation define a rotação inicial do tetrimino.
+# As rotações são: 0 = inicial, 1 = 90°, 2 = 180° e 3 = 270°.
+# __init__ inicializa o tetrimino, verifica sua rotação e cria suas quatro formas possíveis.
+# _original_shape define a forma original de cada tetrimino e deve ser implementada pelas subclasses.
+# _box_size representa o tamanho da caixa necessária para armazenar o tetrimino.
+# Para calcular _box_size, é encontrado o maior valor entre x e y dos quatro blocos e depois é somado 1.
+# _rotate_shape é staticmethod porque não precisa usar self para realizar a rotação.
+# _rotate_shape gira uma forma 90° no sentido horário usando (box_size - 1 - y, x).
+# _shapes armazena as quatro rotações possíveis do tetrimino.
+# shape retorna a forma correspondente à rotação atual.
+# box_size retorna o tamanho da caixa do tetrimino.
+# current_rotation retorna a rotação atual do tetrimino.
+# right_rotate gira o tetrimino 90° para a direita.
+# left_rotate gira o tetrimino 90° para a esquerda.
+# O operador % 4 mantém a rotação dentro dos valores 0, 1, 2 e 3.
+# color é uma propriedade abstrata porque cada tetrimino possui sua própria cor.
+# __str__ desenha o tetrimino em formato de texto dentro de sua caixa.
+# Dentro de __str__, ⬜ representa uma posição ocupada e ⬛ representa uma posição vazia.
 
 
 from abc import ABC, abstractmethod
