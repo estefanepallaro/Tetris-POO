@@ -1,4 +1,4 @@
-# Block ainda não é uma peça, mas representa um bloco dos quatros blocos.
+# Block ainda não é uma peça, mas representa um bloco dos quatro blocos.
 # A importação de InvalidBlockError permite usar essa exceção no block.py. Se x ou y forem negativos, o raise aciona essa exceção.
 # x representa a coluna e y representa a linha do bloco dentro da caixa do tetrimino.
 
