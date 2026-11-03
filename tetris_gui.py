@@ -34,6 +34,8 @@ class TetrisApp(tk.Tk):
         self._easter_text = ""
         self._easter_unlocked = False
 
+        self._easter_finishing = False
+
         painel_titulo = tk.Frame(
             self,
             bg="black",
@@ -106,7 +108,7 @@ class TetrisApp(tk.Tk):
             bd=0,
             relief="flat",
             highlightthickness=0,
-            command=self._easter_egg,
+            command=self._apenas_ponto,
         )
 
         apenas_ponto.pack(
@@ -373,6 +375,10 @@ class TetrisApp(tk.Tk):
     # Uma função qualquer...
 
     def _apenas_ponto(self):
+
+        if self._easter_finishing:
+            return
+
         self._easter_clicks += 1
 
         if self._easter_after_id is not None:
@@ -406,13 +412,16 @@ class TetrisApp(tk.Tk):
             )
 
         elif self._easter_clicks == 7:
+
+            self._easter_finishing = True
+
             self._easter_text = (
                 "ATARI 2600 REFERENCE\n\n"
                 "DIREÇÃO\n"
                 "Éfren Lopes de Souza\n\n"
                 "CREATED BY\n\n"
                 "Arthur Vinicius\n"
-                "Estéfane Pallaro\n"
+                "Estefane Pallaro\n"
                 "Gustavo Augusto\n"
                 "Helena Vinhote\n\n"
                 "Obrigado Professor!"
@@ -435,6 +444,7 @@ class TetrisApp(tk.Tk):
     def _finalizar_apenas_ponto(self):
         self._easter_text = ""
         self._easter_after_id = None
+        self._easter_finishing = False
         self._easter_unlocked = True
 
         self.game.easter_bonus()
@@ -456,7 +466,7 @@ class TetrisApp(tk.Tk):
     # Velocidade de queda do tetrimino
 
     def _schedule_fall(self):
-        if self.game.score >= 10000000:
+        if self._easter_unlocked:
             velocidade = 100
 
         else:
@@ -472,7 +482,7 @@ class TetrisApp(tk.Tk):
             self._fall
         )
 
-    # Funções de desenho do jogo
+    # Queda do tetrimino
     def _fall(self):
         if not self.game.game_over:
 
@@ -512,6 +522,7 @@ class TetrisApp(tk.Tk):
         self._easter_after_id = None
         self._easter_text = ""
         self._easter_unlocked = False
+        self._easter_finishing = False
 
         self._pause_button.config(
             text="Pausar"
