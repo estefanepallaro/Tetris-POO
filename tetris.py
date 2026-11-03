@@ -18,11 +18,18 @@ class Tetris:
 
     def __init__(self):
         self.reset()
-        self._score = 0
 
     @property
     def score(self) -> int:
         return self._score
+
+    @property
+    def lines(self) -> int:
+        return self._lines
+
+    @property
+    def level(self) -> int:
+        return (self._lines // 10) + 1
 
     @property
     def width(self) -> int:
@@ -39,15 +46,36 @@ class Tetris:
     @property
     def active_tetrimino(self) -> tetriminos.Tetrimino:
         return self._tetri_active
+    
+    @property
+    def next_tetrimino(self) -> tetriminos.Tetrimino:
+        return self._next_tetrimino
+    
 
     def reset(self) -> None:
-        self._grid = [[None for _ in range(self.height)] for _ in range(self.width)]
+        self._grid = [
+            [None for _ in range(self.height)]
+            for _ in range(self.width)
+        ]
+
         self._game_over = False
+        self._score = 0
+        self._lines = 0
+
+        self._next_tetrimino = random.choice(
+            Tetris._TETRIMINOS
+        )()
+
         self._new_tetrimino()
     
     def color_at(self, column: int, row: int) -> str | None:
-        if (column, row) in self._tetri_cells(self._tetri_col, self._tetri_row):
-            return self._tetri_active.color
+        if not self._game_over:
+            if (column, row) in self._tetri_cells(
+                self._tetri_col, 
+                self._tetri_row
+            ):
+                return self._tetri_active.color
+            
         return self._grid[column][row]
 
     def move_left(self) -> None:
@@ -108,10 +136,22 @@ class Tetris:
         return set(self._tetri_cells(self._tetri_col, ghost_row))
 
     def _new_tetrimino(self) -> None:
-        self._tetri_active = random.choice(Tetris._TETRIMINOS)()
-        self._tetri_col = (self.width - self._tetri_active.box_size) // 2
+        self._tetri_active = self._next_tetrimino
+
+        self._next_tetrimino = random.choice(
+            Tetris._TETRIMINOS
+        )()
+
+        self._tetri_col = (
+            self.width - self._tetri_active.box_size
+        ) // 2
+
         self._tetri_row = 0
-        if not self._tetri_fits(self._tetri_col, self._tetri_row):
+
+        if not self._tetri_fits(
+            self._tetri_col, 
+            self._tetri_row
+        ):
             self._game_over = True
 
     def _lock(self) -> None:
@@ -125,9 +165,13 @@ class Tetris:
         while r < self.height:
             if all (self._grid[c][r] != None for c in range(self.width)):
                 self._score += 100
+                self._lines += 1
 
                 for c in range(self.width):
                     self._grid[c].pop(r)
                     self._grid[c].insert(0, None)
             else:
                 r += 1 
+
+    def easter_bonus(self):
+        self._score = 10000000

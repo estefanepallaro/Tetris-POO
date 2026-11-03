@@ -2,6 +2,7 @@
 
 from tetris import Tetris
 
+# Função para exibir o tabuleiro colorido no terminal
 def colored_board(game: Tetris) -> str:
     board = []
 
@@ -128,6 +129,7 @@ def exibir_letreiro() -> None:
 
         print(linha)
 
+# Função para exibir o jogo no terminal
 
 def exibir_jogo(game: Tetris):
 
@@ -175,6 +177,7 @@ def exibir_jogo(game: Tetris):
     for esquerda, direita in zip(linhas_tabuleiro, painel):
         print(f"{esquerda}   {direita}")
 
+# Função principal do jogo
 def main() -> None:
     game = Tetris()
 
